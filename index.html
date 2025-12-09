@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marmitaria - Monte seu Pedido Neon</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Estilos Globais e Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* Cores Neon */
+        :root {
+            --neon-purple: #9c27b0; /* Roxo principal */
+            --neon-pink: #e91e63; /* Destaque Rosa */
+            --neon-blue: #3f51b5; /* Azul Secundário */
+            --neon-green: #25D366; /* Verde WhatsApp */
+            --neon-light: #f5f5f5;
+            --dark-bg: #1a0033; /* Fundo escuro */
+            --dark-card: #200040; /* Cor de card mais escura */
+        }
+
+        body {
+            background: var(--dark-bg);
+            /* Gradiente de fundo escuro para o efeito neon */
+            background: radial-gradient(circle at 50% 10%, rgba(200, 50, 255, 0.2) 0%, rgba(0, 0, 0, 0.8) 70%, var(--dark-bg) 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            padding: 20px 0;
+        }
+
+        .phone-container {
+            max-width: 420px;
+            width: 100%;
+            background: var(--dark-card);
+            border-radius: 35px;
+            box-shadow: 0 0 30px rgba(156, 39, 176, 0.5), 0 0 60px rgba(233, 30, 99, 0.3);
+            overflow: hidden;
+            border: 4px solid var(--neon-purple);
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Header e Título */
+        header {
+            padding: 25px 20px;
+            text-align: center;
+            color: var(--neon-light);
+            background: linear-gradient(135deg, var(--dark-card) 0%, #3a0050 100%);
+            border-bottom: 2px solid var(--neon-pink);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            border: 2px solid var(--neon-pink);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            background-color: var(--neon-purple);
+            box-shadow: 0 0 8px var(--neon-pink);
+        }
+
+        .logo-icon span {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--neon-light);
+            text-shadow: 0 0 5px var(--neon-light);
+        }
+
+        h1 {
+            font-size: 1.8em;
+            font-weight: 700;
+            text-shadow: 0 0 10px var(--neon-purple);
+            color: var(--neon-light);
+        }
+
+        .subtitle {
+            font-size: 0.9em;
+            color: #ccc;
+            margin-top: 5px;
+        }
+
+        /* Conteúdo Principal */
+        .content {
+            padding: 20px;
+        }
+
+        .section {
+            margin-bottom: 25px;
+        }
+
+        .section-title {
+            color: var(--neon-pink);
+            font-size: 1.1em;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding-bottom: 5px;
+            border-bottom: 1px dashed rgba(233, 30, 99, 0.3);
+        }
+
+        /* Cartões de Tamanho */
+        .size-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+        }
+
+        .size-card, .menu-card {
+            background: var(--dark-bg);
+            color: var(--neon-light);
+            padding: 15px;
+            border-radius: 15px;
+            border: 2px solid var(--dark-bg);
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s ease-in-out;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            min-height: 100px; /* Para as opções de tamanho */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .size-card.selected {
+            background: linear-gradient(135deg, var(--neon-pink) 0%, var(--neon-purple) 100%);
+            border-color: var(--neon-light);
+            box-shadow: 0 0 15px var(--neon-pink), 0 0 25px rgba(156, 39, 176, 0.5);
+            transform: scale(1.05);
+        }
+
+        .size-card h3 {
+            font-size: 1.2em;
+            margin-bottom: 5px;
+        }
+
+        .size-card .price {
+            font-size: 1.5em;
+            font-weight: 700;
+            text-shadow: 0 0 5px var(--neon-light);
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        /* Item de Opção/Toggle */
+        .toggle-option {
+            background: var(--dark-bg);
+            padding: 12px 15px;
+            border-radius: 10px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            color: var(--neon-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.2s;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+            font-size: 0.9em;
+        }
+
+        .toggle-option:hover {
+            border-color: var(--neon-purple);
+            box-shadow: 0 0 8px rgba(156, 39, 176, 0.7);
+        }
+
+        .toggle-option.selected {
+            background: var(--neon-blue);
+            border-color: var(--neon-pink);
+            box-shadow: 0 0 15px var(--neon-blue);
+            color: var(--neon-light);
+        }
+
+        .toggle-switch {
+            width: 30px;
+            height: 18px;
+            background: #444;
+            border-radius: 9px;
+            position: relative;
+            transition: background 0.2s;
+        }
+
+        .toggle-switch::before {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 14px;
+            height: 14px;
+            background: var(--neon-light);
+            border-radius: 50%;
+            transition: transform 0.2s;
+        }
+
+        .toggle-option.selected .toggle-switch {
+            background: var(--neon-pink);
+        }
+
+        .toggle-option.selected .toggle-switch::before {
+            transform: translateX(12px);
+            background: var(--neon-light);
+        }
+
+        .toggle-option input[type="checkbox"] {
+            display: none; /* Esconde o checkbox real */
+        }
+        
+        /* Preços de Adicionais ao lado */
+        .extra-price {
+            font-size: 0.85em;
+            color: #ccc;
+            margin-left: 5px;
+        }
+
+        .toggle-option.selected .extra-price {
+            color: var(--neon-light);
+        }
+
+        /* Resumo do Pedido */
+        .summary {
+            background: #100020;
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 25px;
+            border: 2px solid var(--neon-purple);
+            box-shadow: 0 0 10px rgba(156, 39, 176, 0.5);
+        }
+
+        .summary h3 {
+            color: var(--neon-pink);
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid rgba(233, 30, 99, 0.5);
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            color: var(--neon-light);
+            border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+            font-size: 0.9em;
+        }
+        
+        .summary-item:last-of-type {
+            border-bottom: none;
+        }
+
+        .summary-total {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 0 0;
+            font-size: 1.4em;
+            font-weight: 700;
+            color: var(--neon-green); /* Destaque para o total */
+            text-shadow: 0 0 5px rgba(37, 211, 102, 0.5);
+        }
+        
+        .summary-payment-btn {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .payment-button {
+            flex-grow: 1;
+            padding: 8px 10px;
+            border-radius: 8px;
+            font-size: 0.8em;
+            font-weight: 600;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .payment-button.picpay {
+            background-color: #21c25e;
+            color: white;
+        }
+        
+        .payment-button.pix {
+            background-color: #555555;
+            color: white;
+        }
+
+        /* Botão WhatsApp */
+        .btn-whatsapp {
+            background: var(--neon-green);
+            color: white;
+            border: none;
+            padding: 15px 20px;
+            font-size: 1.1em;
+            border-radius: 15px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.3s;
+            box-shadow: 0 0 20px rgba(37, 211, 102, 0.5);
+            font-weight: 600;
+        }
+
+        .btn-whatsapp:hover:not(:disabled) {
+            background: #128C7E;
+            transform: translateY(-2px);
+        }
+
+        .btn-whatsapp:disabled {
+            background: #444;
+            color: #999;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        /* Alertas/Mensagens */
+        .alert-message {
+            background: #4a148c;
+            color: var(--neon-light);
+            padding: 10px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid var(--neon-pink);
+        }
+
+        /* Responsividade */
+        @media (max-width: 450px) {
+            .phone-container {
+                border-radius: 0;
+            }
+            body {
+                padding: 0;
+                background: var(--dark-bg); /* Remove o gradiente para telas pequenas */
+            }
+            .content {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="phone-container">
+        <header>
+            <div class="logo">
+                <div class="logo-icon"><span>M</span></div>
+                <h1>MARMITARIA</h1>
+            </div>
+            <p class="subtitle">Monte sua marmita do seu jeito! ✨</p>
+        </header>
+
+        <div class="content">
+            <div class="section">
+                <h2 class="section-title">☑️ Escolha o Tamanho</h2>
+                <div class="size-cards-grid">
+                    <div class="size-card" data-size="pequena" data-price="15.00" onclick="selectSize(this)">
+                        <h3>Pequena</h3>
+                        <p class="price">R$ 15,00</p>
+                        <p style="font-size: 0.8em;">(Máx. 1 Carne)</p>
+                    </div>
+                    <div class="size-card" data-size="grande" data-price="20.00" onclick="selectSize(this)">
+                        <h3>Grande</h3>
+                        <p class="price">R$ 20,00</p>
+                        <p style="font-size: 0.8em;">(Máx. 2 Carnes)</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="alert-message" id="size-warning" style="display: none;">
+                ⚠️ Por favor, escolha o tamanho da marmita primeiro.
+            </div>
+
+            <div class="section" id="carnes-section">
+                <h2 class="section-title">🍖 Carnes <span id="carne-limit" style="font-size: 0.8em; color: var(--neon-pink);"></span></h2>
+                <div class="menu-grid">
+                    <div class="toggle-option" data-type="carne" data-value="Carne Assada">
+                        <span>Carne Assada</span>
+                        <div class="toggle-switch"></div>
+                    </div>
+                    <div class="toggle-option" data-type="carne" data-value="Frango Empanado">
+                        <span>Frango Empanado</span>
+                        <div class="toggle-switch"></div>
+                    </div>
+                    <div class="toggle-option" data-type="carne" data-value="Bife de Pernil">
+                        <span>Bife de Pernil</span>
+                        <div class="toggle-switch"></div>
+                    </div>
+                    <div class="toggle-option" data-type="carne" data-value="Peixe Frito">
+                        <span>Peixe Frito</span>
+                        <div class="toggle-switch"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">🍚 Guarnições & Acompanhamentos</h2>
+                <div class="menu-grid">
+                    <div class="toggle-option" data-type="guarnicao" data-value="Arroz">
+                        <span>Arroz</span>
+                        <div class="toggle-switch"></div>
+                    </div>
+                    <div class="toggle-option" data-type="guarnicao" data-value="Feijão">
+                        <span>Feijão</span>
+                        <div class="toggle-switch"></div>
+                    </div>
+                    <div class="toggle-option" data-type="guarnicao" data-value="Macarrão">
+                        <span>Macarrão</span>
+                        <div class="toggle-switch"></div>
+                    </div>
+                    <div class="toggle-option" data-type="guarnicao" data-value="Farofa">
+                        <span>Farofa</span>
+                        <div class="toggle-switch"></div>
+                    </div>
+                    <div class="toggle-option" data-type="acompanhamento" data-value="Batata Frita (+R$ 5,00)" data-extra-price="5.00">
+                        <span>Batata Frita</span>
+                        <span class="extra-price">+R$ 5,00</span>
+                        <div class="toggle-switch"></div>
+                    </div>
+                    <div class="toggle-option" data-type="acompanhamento" data-value="Ovos Fritos (+R$ 2,00)" data-extra-price="2.00">
+                        <span>Ovos Fritos</span>
+                        <span class="extra-price">+R$ 2,00</span>
+                        <div class="toggle-switch"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2 class="section-title">🥗 Saladas</h2>
+                <div class="menu-grid">
+                    <div class="toggle-option" data-type="salada" data-value="Alface">
+                        <span>Alface</span>
+                        <div class="toggle-switch"></div>
+                    </div>
+                    <div class="toggle-option" data-type="salada" data-value="Tomate">
+                        <span>Tomate</span>
+                        <div class="toggle-switch"></div>
+                    </div>
+                    <div class="toggle-option" data-type="salada" data-value="Cenoura">
+                        <span>Cenoura</span>
+                        <div class="toggle-switch"></div>
+                    </div>
+                    <div class="toggle-option" data-type="salada" data-value="Vinagrete">
+                        <span>Vinagrete</span>
+                        <div class="toggle-switch"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="summary">
+                <h3>📋 Resumo do Pedido</h3>
+                <div id="summary-content">
+                    <p style="color: #999; text-align: center; font-style: italic; padding: 10px 0;">Selecione o tamanho e os itens para ver o resumo.</p>
+                </div>
+                
+                <div class="summary-total" style="display: none;" id="total-section">
+                    <span>TOTAL:</span>
+                    <span id="total-price-display">R$ 0,00</span>
+                </div>
+                
+                <div class="summary-payment-btn">
+                    <a href="https://picpay.me/" target="_blank" class="payment-button picpay">
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect x='0' y='0' width='200' height='200' fill='%2321c25e'/%3E%3Ctext x='100' y='130' font-family='Arial' font-size='60' fill='white' text-anchor='middle' font-weight='bold'%3E%24%3C/text%3E%3C/svg%3E" alt="PicPay Icon" style="width: 12px; height: 12px; vertical-align: middle; margin-right: 3px;">
+                        PicPay
+                    </a>
+                    <a href="#" class="payment-button pix" onclick="alert('Chave PIX: 27997924966 - Nome: Jared Silva. Por favor, envie o comprovante no WhatsApp!')">
+                         <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect x='0' y='0' width='200' height='200' fill='%23555555'/%3E%3Ctext x='100' y='130' font-family='Arial' font-size='60' fill='white' text-anchor='middle' font-weight='bold'%3EPX%3C/text%3E%3C/svg%3E" alt="PIX Icon" style="width: 12px; height: 12px; vertical-align: middle; margin-right: 3px;">
+                        PIX
+                    </a>
+                </div>
+            </div>
+
+            <button class="btn-whatsapp" onclick="sendWhatsApp()" id="whatsappBtn" disabled>
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white' width='24px' height='24px'%3E%3Cpath d='M12 0C5.373 0 0 5.373 0 12c0 3.321 1.341 6.315 3.513 8.487l-.013.012-3.5 1.5.012-.012L.001 24l3.5-1.5c2.172 2.172 5.166 3.513 8.487 3.513C18.627 24 24 18.627 24 12S18.627 0 12 0zm5.174 18.397c-.321-.157-1.895-.931-2.185-1.037-.29-.106-.5-.159-.709.159-.208.318-.813 1.036-1.002 1.25-.189.215-.378.239-.701.079-.321-.159-1.353-.497-2.571-1.583-1.196-1.077-1.996-2.4-2.233-2.812-.237-.411-.025-.632.186-.838.188-.186.417-.487.632-.733.215-.246.287-.412.483-.787.197-.376.1-.709-.05-.998-.157-.288-.702-1.703-.961-2.33-.258-.627-.517-.54-.709-.549-.174-.015-.378-.016-.582-.016-.208 0-.547.079-.838.398-.291.318-1.112 1.077-1.112 2.628 0 1.55 1.134 3.041 1.291 3.256.157.215 2.231 3.4 5.397 4.757 3.167 1.357 3.978 1.077 4.707.986.732-.091 1.895-.776 2.152-1.524.258-.748.258-1.385.182-1.524-.075-.138-.29-.214-.61-.373z'/%3E%3C/svg%3E" alt="WhatsApp Icon" style="vertical-align: middle;">
+                Finalizar Pedido pelo WhatsApp
+            </button>
+        </div>
+
+    </div>
+
+    <script>
+        let order = {
+            size: null,
+            basePrice: 0.00,
+            maxCarnes: 0,
+            carnes: [],
+            guarnicoes: [],
+            acompanhamentos: [],
+            saladas: [],
+            totalPrice: 0.00
+        };
+        
+        const SIZE_WARNING = document.getElementById('size-warning');
+        const CARNE_LIMIT = document.getElementById('carne-limit');
+        const SUMMARY_CONTENT = document.getElementById('summary-content');
+        const TOTAL_SECTION = document.getElementById('total-section');
+        const TOTAL_PRICE_DISPLAY = document.getElementById('total-price-display');
+        const WHATSAPP_BTN = document.getElementById('whatsappBtn');
+        
+        // --- Funções de Lógica ---
+        
+        function selectSize(element) {
+            const newSize = element.getAttribute('data-size');
+            const newPrice = parseFloat(element.getAttribute('data-price'));
+            
+            // Remove a seleção de todos os cartões
+            document.querySelectorAll('.size-card').forEach(card => card.classList.remove('selected'));
+            
+            // Aplica a seleção no novo cartão
+            element.classList.add('selected');
+            
+            // Atualiza o objeto do pedido
+            order.size = newSize;
+            order.basePrice = newPrice;
+            order.maxCarnes = newSize === 'grande' ? 2 : 1;
+            
+            // Reseta a seleção de carnes se exceder o novo limite
+            if (order.carnes.length > order.maxCarnes) {
+                // Desmarca as carnes na interface (mantém apenas as primeiras N)
+                const carneOptions = document.querySelectorAll('#carnes-section .toggle-option');
+                carneOptions.forEach((item, index) => {
+                    const value = item.getAttribute('data-value');
+                    if (!order.carnes.slice(0, order.maxCarnes).includes(value)) {
+                        item.classList.remove('selected');
+                    }
+                });
+                order.carnes = order.carnes.slice(0, order.maxCarnes);
+            }
+
+            SIZE_WARNING.style.display = 'none';
+            updateSummary();
+        }
+        
+        function toggleOption(element) {
+            const type = element.getAttribute('data-type');
+            const value = element.getAttribute('data-value');
+            const isSelected = element.classList.contains('selected');
+            
+            // Bloquear seleção de carne se o tamanho não estiver definido
+            if (type === 'carne' && !order.size) {
+                SIZE_WARNING.style.display = 'block';
+                return;
+            }
+            
+            if (isSelected) {
+                // Desmarcar
+                element.classList.remove('selected');
+                if (order[type + 's']) {
+                    order[type + 's'] = order[type + 's'].filter(item => item !== value);
+                }
+            } else {
+                // Marcar
+                if (type === 'carne') {
+                    if (order.carnes.length >= order.maxCarnes) {
+                        alert(`Você já selecionou o máximo de ${order.maxCarnes} carne(s) para o tamanho ${order.size.toUpperCase()}!`);
+                        return; // Impede a seleção
+                    }
+                }
+                
+                element.classList.add('selected');
+                if (order[type + 's']) {
+                    order[type + 's'].push(value);
+                }
+            }
+            
+            updateSummary();
+        }
+        
+        function updateSummary() {
+            // Atualiza o limite de carnes exibido
+            CARNE_LIMIT.textContent = order.size ? `(Máx. ${order.maxCarnes} selecionada${order.maxCarnes > 1 ? 's' : ''})` : '';
+
+            // 1. Calcula o Preço Total
+            let total = order.basePrice;
+            let summaryHTML = '';
+            
+            // Adiciona o valor base/tamanho
+            if (order.size) {
+                summaryHTML += `<div class="summary-item"><span>Tamanho ${order.size.charAt(0).toUpperCase() + order.size.slice(1)}</span><span>R$ ${order.basePrice.toFixed(2).replace('.', ',')}</span></div>`;
+            }
+            
+            // 2. Monta a lista de itens e soma adicionais
+            const allSelectedItems = [];
+            
+            // Carnes
+            if (order.carnes.length > 0) {
+                summaryHTML += `<div class="summary-item"><span>🥩 Carnes (${order.carnes.length}/${order.maxCarnes}):</span><span>${order.carnes.join(', ')}</span></div>`;
+            }
+
+            // Guarnições e Saladas (não tem custo extra neste exemplo, apenas listados)
+            if (order.guarnicoes.length > 0) {
+                summaryHTML += `<div class="summary-item"><span>🍚 Guarnições:</span><span>${order.guarnicoes.join(', ')}</span></div>`;
+            }
+            if (order.saladas.length > 0) {
+                summaryHTML += `<div class="summary-item"><span>🥗 Saladas:</span><span>${order.saladas.join(', ')}</span></div>`;
+            }
+            
+            // Acompanhamentos (que possuem custo extra)
+            const addons = [];
+            document.querySelectorAll('.toggle-option.selected[data-type="acompanhamento"]').forEach(item => {
+                const value = item.getAttribute('data-value').replace(/\s\(\+.+\)/, ''); // Remove o preço do nome
+                const price = parseFloat(item.getAttribute('data-extra-price'));
+                addons.push({ name: value, price: price });
+                total += price;
+            });
+            
+            if (addons.length > 0) {
+                summaryHTML += `<div class="summary-item"><span>Extras:</span><span></span></div>`;
+                addons.forEach(addon => {
+                    summaryHTML += `<div class="summary-item" style="padding-left: 15px;"><span>- ${addon.name}</span><span style="color: var(--neon-pink);">+R$ ${addon.price.toFixed(2).replace('.', ',')}</span></div>`;
+                });
+            }
+
+            // 3. Atualiza o objeto e a interface
+            order.totalPrice = total;
+
+            if (order.size && (order.carnes.length > 0 || order.guarnicoes.length > 0 || addons.length > 0 || order.saladas.length > 0)) {
+                SUMMARY_CONTENT.innerHTML = summaryHTML;
+                TOTAL_PRICE_DISPLAY.textContent = `R$ ${total.toFixed(2).replace('.', ',')}`;
+                TOTAL_SECTION.style.display = 'flex';
+                WHATSAPP_BTN.disabled = false;
+            } else {
+                SUMMARY_CONTENT.innerHTML = '<p style="color: #999; text-align: center; font-style: italic; padding: 10px 0;">Selecione o tamanho e os itens para ver o resumo.</p>';
+                TOTAL_SECTION.style.display = 'none';
+                WHATSAPP_BTN.disabled = true;
+            }
+        }
+
+        // --- Função WhatsApp ---
+
+        function sendWhatsApp() {
+            if (!order.size || order.carnes.length === 0) {
+                alert('É necessário selecionar o tamanho e pelo menos uma carne para finalizar o pedido.');
+                return;
+            }
+
+            let message = `🍽️ *PEDIDO MARMITARIA* 🍽️\n\n`;
+            message += `📦 *Tamanho:* ${order.size.charAt(0).toUpperCase() + order.size.slice(1)} (R$ ${order.basePrice.toFixed(2).replace('.', ',')})\n\n`;
+            
+            message += `_Opções Selecionadas:_\n`;
+            
+            // Carnes
+            if (order.carnes.length > 0) {
+                message += `🍖 *Carnes (${order.carnes.length}/${order.maxCarnes}):*\n${order.carnes.map(c => `• ${c}`).join('\n')}\n`;
+            }
+            
+            // Guarnições
+            if (order.guarnicoes.length > 0) {
+                message += `\n🍚 *Guarnições:*\n${order.guarnicoes.map(g => `• ${g}`).join('\n')}\n`;
+            }
+
+            // Saladas
+            if (order.saladas.length > 0) {
+                message += `\n🥗 *Saladas:*\n${order.saladas.map(s => `• ${s}`).join('\n')}\n`;
+            }
+            
+            // Acompanhamentos/Extras
+            const addons = [];
+            document.querySelectorAll('.toggle-option.selected[data-type="acompanhamento"]').forEach(item => {
+                addons.push(item.getAttribute('data-value'));
+            });
+
+            if (addons.length > 0) {
+                message += `\n🍟 *Extras:*\n${addons.map(a => `• ${a}`).join('\n')}\n`;
+            }
+
+            // Total
+            message += `\n---`;
+            message += `\n*TOTAL DO PEDIDO: R$ ${order.totalPrice.toFixed(2).replace('.', ',')}*\n`;
+            message += `---\n\n`;
+
+            message += `💳 *Pagamento:*\n`;
+            message += `Por favor, pague por PIX ou PicPay e envie o comprovante.`;
+            
+            const whatsappNumber = "5527997924966"; // Exemplo: 55 DDD NÚMERO
+            const whatsappURL = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+            window.open(whatsappURL, '_blank');
+        }
+
+        // Adiciona a funcionalidade de clique em todos os "toggle-option"
+        document.querySelectorAll('.toggle-option').forEach(item => {
+            item.onclick = (e) => toggleOption(item);
+        });
+        
+        // Inicializa o resumo ao carregar a página
+        document.addEventListener('DOMContentLoaded', updateSummary);
+    </script>
+</body>
+</html>
