@@ -23,6 +23,7 @@
             --neon-light: #f5f5f5;
             --dark-bg: #1a0033; /* Fundo escuro */
             --dark-card: #200040; /* Cor de card mais escura */
+            --neon-cyan: #00bcd4; /* Novo destaque para bebidas */
         }
 
         body {
@@ -115,6 +116,12 @@
             padding-bottom: 5px;
             border-bottom: 1px dashed rgba(233, 30, 99, 0.3);
         }
+        
+        /* Novo estilo para o título de bebidas */
+        .section-title.beverage-title {
+            color: var(--neon-cyan);
+            border-bottom: 1px dashed rgba(0, 188, 212, 0.5);
+        }
 
         /* Cartões de Tamanho */
         .size-cards-grid {
@@ -186,11 +193,18 @@
             box-shadow: 0 0 8px rgba(156, 39, 176, 0.7);
         }
 
+        /* Destaque para seleção de Acompanhamentos e Bebidas */
         .toggle-option.selected {
             background: var(--neon-blue);
             border-color: var(--neon-pink);
             box-shadow: 0 0 15px var(--neon-blue);
             color: var(--neon-light);
+        }
+        
+        .toggle-option[data-type="bebida"].selected {
+            background: var(--neon-cyan);
+            border-color: var(--neon-light);
+            box-shadow: 0 0 15px var(--neon-cyan);
         }
 
         .toggle-switch {
@@ -217,6 +231,10 @@
         .toggle-option.selected .toggle-switch {
             background: var(--neon-pink);
         }
+        
+        .toggle-option[data-type="bebida"].selected .toggle-switch {
+            background: var(--neon-purple); /* Muda a cor do switch para diferenciar bebidas */
+        }
 
         .toggle-option.selected .toggle-switch::before {
             transform: translateX(12px);
@@ -236,8 +254,9 @@
 
         .toggle-option.selected .extra-price {
             color: var(--neon-light);
+            font-weight: 600;
         }
-
+        
         /* Resumo do Pedido */
         .summary {
             background: #100020;
@@ -267,6 +286,12 @@
         
         .summary-item:last-of-type {
             border-bottom: none;
+        }
+        
+        /* Destaque para o preço dos itens adicionais no resumo */
+        .summary-item .price-detail {
+            color: var(--neon-cyan);
+            font-weight: 600;
         }
 
         .summary-total {
@@ -383,9 +408,9 @@
                         <p class="price">R$ 15,00</p>
                         <p style="font-size: 0.8em;">(Máx. 1 Carne)</p>
                     </div>
-                    <div class="size-card" data-size="grande" data-price="20.00" onclick="selectSize(this)">
+                    <div class="size-card" data-size="grande" data-price="18.00" onclick="selectSize(this)">
                         <h3>Grande</h3>
-                        <p class="price">R$ 20,00</p>
+                        <p class="price">R$ 18,00</p>
                         <p style="font-size: 0.8em;">(Máx. 2 Carnes)</p>
                     </div>
                 </div>
@@ -418,27 +443,44 @@
             </div>
 
             <div class="section">
-                <h2 class="section-title">🍚 Guarnições & Acompanhamentos</h2>
+                <h2 class="section-title">🍚 Guarnições</h2>
                 <div class="menu-grid">
-                    <div class="toggle-option" data-type="guarnicao" data-value="Arroz">
-                        <span>Arroz</span>
+                    <div class="toggle-option" data-type="guarnicao" data-value="Arroz Branco">
+                        <span>Arroz Branco</span>
                         <div class="toggle-switch"></div>
                     </div>
-                    <div class="toggle-option" data-type="guarnicao" data-value="Feijão">
-                        <span>Feijão</span>
+                    <div class="toggle-option" data-type="guarnicao" data-value="Arroz Integral">
+                        <span>Arroz Integral</span>
+                        <div class="toggle-switch"></div>
+                    </div>
+                    <div class="toggle-option" data-type="guarnicao" data-value="Feijão Caldo">
+                        <span>Feijão Caldo</span>
+                        <div class="toggle-switch"></div>
+                    </div>
+                    <div class="toggle-option" data-type="guarnicao" data-value="Feijao Tropeiro">
+                        <span>Feijão Tropeiro</span>
                         <div class="toggle-switch"></div>
                     </div>
                     <div class="toggle-option" data-type="guarnicao" data-value="Macarrão">
                         <span>Macarrão</span>
                         <div class="toggle-switch"></div>
                     </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">🥗 Acompanhamentos</h2>
+                <div class="menu-grid">
                     <div class="toggle-option" data-type="guarnicao" data-value="Farofa">
                         <span>Farofa</span>
                         <div class="toggle-switch"></div>
                     </div>
-                    <div class="toggle-option" data-type="acompanhamento" data-value="Batata Frita (+R$ 5,00)" data-extra-price="5.00">
-                        <span>Batata Frita</span>
-                        <span class="extra-price">+R$ 5,00</span>
+                    <div class="toggle-option" data-type="salada" data-value="Banana Frita">
+                        <span>Banana Frita</span>
+                        <div class="toggle-switch"></div>
+                    </div>
+                    <div class="toggle-option" data-type="salada" data-value="Polenta">
+                        <span>Polenta</span>
                         <div class="toggle-switch"></div>
                     </div>
                     <div class="toggle-option" data-type="acompanhamento" data-value="Ovos Fritos (+R$ 2,00)" data-extra-price="2.00">
@@ -470,7 +512,32 @@
                     </div>
                 </div>
             </div>
-
+            
+            <div class="section">
+                <h2 class="section-title beverage-title">🥤 Bebidas Geladas</h2>
+                <div class="menu-grid">
+                    <div class="toggle-option" data-type="bebida" data-value="Suco Natural (+R$ 7,00)" data-extra-price="7.00">
+                        <span>Suco Natural</span>
+                        <span class="extra-price">+R$ 7,00</span>
+                        <div class="toggle-switch"></div>
+                    </div>
+                    <div class="toggle-option" data-type="bebida" data-value="Refrigerante Lata (+R$ 5,00)" data-extra-price="5.00">
+                        <span>Refri Lata</span>
+                        <span class="extra-price">+R$ 5,00</span>
+                        <div class="toggle-switch"></div>
+                    </div>
+                    <div class="toggle-option" data-type="bebida" data-value="Refrigerante 1L (+R$ 10,00)" data-extra-price="10.00">
+                        <span>Refri 1 Litro</span>
+                        <span class="extra-price">+R$ 10,00</span>
+                        <div class="toggle-switch"></div>
+                    </div>
+                    <div class="toggle-option" data-type="bebida" data-value="Juninho (Guaraná) (+R$ 4,00)" data-extra-price="4.00">
+                        <span>Juninho</span>
+                        <span class="extra-price">+R$ 4,00</span>
+                        <div class="toggle-switch"></div>
+                    </div>
+                </div>
+            </div>
             <div class="summary">
                 <h3>📋 Resumo do Pedido</h3>
                 <div id="summary-content">
@@ -511,6 +578,8 @@
             guarnicoes: [],
             acompanhamentos: [],
             saladas: [],
+            // NOVO: Array para bebidas
+            bebidas: [],
             totalPrice: 0.00
         };
         
@@ -569,6 +638,7 @@
             if (isSelected) {
                 // Desmarcar
                 element.classList.remove('selected');
+                // Remove o item do array correto
                 if (order[type + 's']) {
                     order[type + 's'] = order[type + 's'].filter(item => item !== value);
                 }
@@ -582,6 +652,7 @@
                 }
                 
                 element.classList.add('selected');
+                // Adiciona o item ao array correto
                 if (order[type + 's']) {
                     order[type + 's'].push(value);
                 }
@@ -600,11 +671,10 @@
             
             // Adiciona o valor base/tamanho
             if (order.size) {
-                summaryHTML += `<div class="summary-item"><span>Tamanho ${order.size.charAt(0).toUpperCase() + order.size.slice(1)}</span><span>R$ ${order.basePrice.toFixed(2).replace('.', ',')}</span></div>`;
+                summaryHTML += `<div class="summary-item"><span>Tamanho ${order.size.charAt(0).toUpperCase() + order.size.slice(1)}</span><span class="price-detail">R$ ${order.basePrice.toFixed(2).replace('.', ',')}</span></div>`;
             }
             
             // 2. Monta a lista de itens e soma adicionais
-            const allSelectedItems = [];
             
             // Carnes
             if (order.carnes.length > 0) {
@@ -619,7 +689,7 @@
                 summaryHTML += `<div class="summary-item"><span>🥗 Saladas:</span><span>${order.saladas.join(', ')}</span></div>`;
             }
             
-            // Acompanhamentos (que possuem custo extra)
+            // Acompanhamentos (com custo extra)
             const addons = [];
             document.querySelectorAll('.toggle-option.selected[data-type="acompanhamento"]').forEach(item => {
                 const value = item.getAttribute('data-value').replace(/\s\(\+.+\)/, ''); // Remove o preço do nome
@@ -629,16 +699,34 @@
             });
             
             if (addons.length > 0) {
-                summaryHTML += `<div class="summary-item"><span>Extras:</span><span></span></div>`;
+                summaryHTML += `<div class="summary-item" style="padding-top: 10px;"><span>Extras (Acompanhamentos):</span><span></span></div>`;
                 addons.forEach(addon => {
-                    summaryHTML += `<div class="summary-item" style="padding-left: 15px;"><span>- ${addon.name}</span><span style="color: var(--neon-pink);">+R$ ${addon.price.toFixed(2).replace('.', ',')}</span></div>`;
+                    summaryHTML += `<div class="summary-item" style="padding-left: 15px;"><span>- ${addon.name}</span><span class="price-detail">+R$ ${addon.price.toFixed(2).replace('.', ',')}</span></div>`;
                 });
             }
 
+            // Bebidas (com custo extra) - NOVO
+            const drinks = [];
+            document.querySelectorAll('.toggle-option.selected[data-type="bebida"]').forEach(item => {
+                const value = item.getAttribute('data-value').replace(/\s\(\+.+\)/, ''); // Remove o preço do nome
+                const price = parseFloat(item.getAttribute('data-extra-price'));
+                drinks.push({ name: value, price: price });
+                total += price;
+            });
+            
+            if (drinks.length > 0) {
+                summaryHTML += `<div class="summary-item" style="padding-top: 10px;"><span>🥤 Bebidas:</span><span></span></div>`;
+                drinks.forEach(drink => {
+                    summaryHTML += `<div class="summary-item" style="padding-left: 15px;"><span>- ${drink.name}</span><span class="price-detail">+R$ ${drink.price.toFixed(2).replace('.', ',')}</span></div>`;
+                });
+            }
+            
             // 3. Atualiza o objeto e a interface
             order.totalPrice = total;
 
-            if (order.size && (order.carnes.length > 0 || order.guarnicoes.length > 0 || addons.length > 0 || order.saladas.length > 0)) {
+            const hasItems = order.carnes.length > 0 || order.guarnicoes.length > 0 || order.saladas.length > 0 || addons.length > 0 || drinks.length > 0;
+            
+            if (order.size && hasItems) {
                 SUMMARY_CONTENT.innerHTML = summaryHTML;
                 TOTAL_PRICE_DISPLAY.textContent = `R$ ${total.toFixed(2).replace('.', ',')}`;
                 TOTAL_SECTION.style.display = 'flex';
@@ -685,7 +773,17 @@
             });
 
             if (addons.length > 0) {
-                message += `\n🍟 *Extras:*\n${addons.map(a => `• ${a}`).join('\n')}\n`;
+                message += `\n🍟 *Extras (Acompanhamentos):*\n${addons.map(a => `• ${a}`).join('\n')}\n`;
+            }
+            
+            // Bebidas - NOVO
+            const drinks = [];
+            document.querySelectorAll('.toggle-option.selected[data-type="bebida"]').forEach(item => {
+                drinks.push(item.getAttribute('data-value'));
+            });
+            
+            if (drinks.length > 0) {
+                message += `\n🥤 *Bebidas:*\n${drinks.map(d => `• ${d}`).join('\n')}\n`;
             }
 
             // Total
@@ -696,7 +794,7 @@
             message += `💳 *Pagamento:*\n`;
             message += `Por favor, pague por PIX ou PicPay e envie o comprovante.`;
             
-            const whatsappNumber = "5527997924966"; // Exemplo: 55 DDD NÚMERO
+            const whatsappNumber = "5527998540883"; // Exemplo: 55 DDD NÚMERO
             const whatsappURL = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
             window.open(whatsappURL, '_blank');
         }
